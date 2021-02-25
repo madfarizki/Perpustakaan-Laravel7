@@ -14,10 +14,10 @@
         <a href="{{ route('buku.create')}}" class="btn btn-icon icon-left btn-primary mb-4"><i class="fas fa-plus"></i>Tambah Buku</a>
       </div>
       <div class="col">
-        <form action="/admin/search" method="GET">
+        <form action="/admin/search" method="GET" class="form-inline mr-auto">
           <div class="search-element">
-            <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="search" data-width="250">
-            <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+            <input class="form-control" type="search" placeholder="Cari Buku" aria-label="Search" name="search" data-width="250">
+            <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
             <div class="search-backdrop"></div>
           </div>
         </form>
