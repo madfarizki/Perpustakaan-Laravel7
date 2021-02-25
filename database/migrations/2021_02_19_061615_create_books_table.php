@@ -26,7 +26,6 @@ class CreateBooksTable extends Migration
             $table->string('isbn', 50);
             $table->integer('stock');
 
-            $table->softDeletes();
             $table->timestamps();
         });
     }

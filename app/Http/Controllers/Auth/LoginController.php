@@ -35,6 +35,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
+        toast('Berhasil Login','success');
         $this->middleware('guest')->except('logout');
     }
 }

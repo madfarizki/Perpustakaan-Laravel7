@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>@yield('title')</title>
+  <title>@yield('title') | Perpustakaan Nesas</title>
 
   @stack('prepend-style')
   @include('includes.style')
@@ -16,6 +16,7 @@
   <div id="app">
     <div class="main-wrapper">
       <div class="navbar-bg"></div>
+      
       @include('includes.navbar');
       
       @include('includes.sidebar');
@@ -27,6 +28,7 @@
   </div>
 
   @stack('prepend-script')
+  @include('sweetalert::alert')
   @include('includes.script')
   @stack('addon-script')
 </body>

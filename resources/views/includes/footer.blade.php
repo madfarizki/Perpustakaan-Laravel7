@@ -1,8 +1,8 @@
 <footer class="main-footer">
   <div class="footer-left">
-    Copyright &copy; 2021 <div class="bullet"></div> Nesas Perpus Design By <a href="https://madfariz.web.id/">Ahmad Alfarizki</a>
+    Copyright &copy; 2021 <div class="bullet"></div> Nesas Perpus By <a href="https://madfariz.web.id/">RPL 19</a>
   </div>
   <div class="footer-right">
-    2.3.0
+    V.1
   </div>
 </footer>

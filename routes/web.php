@@ -20,11 +20,17 @@ Route::get('/', function () {
 
 // Admin
 Route::prefix('admin')
-    ->name('admin')
     ->middleware(['auth', 'role'])
     ->group(function() {
 
     Route::get('/', 'AdminController@index' )->name('dashboard');
+
+    Route::resource('buku', 'BookController' );
+    Route::resource('peminjaman', 'BorrowingController' );
+    Route::resource('siswa', 'StudentController' );
+    
+    Route::get('/search', 'BookController@search');
+
 });
 
 
