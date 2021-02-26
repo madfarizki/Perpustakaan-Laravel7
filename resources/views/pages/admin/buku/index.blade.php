@@ -40,7 +40,7 @@
                   </tr>
               </thead>
               <tbody>
-                @foreach($books as $bk)
+                @forelse($books as $bk)
                 <tr>
                 <td>{{ $bk->book_code }}</td>
                 <td>{{ $bk->name }}</td>
@@ -64,7 +64,13 @@
                 
                 </td>
                 </tr>
-                @endforeach
+                @empty
+                  <tr>
+                      <td colspan="7" class="text-center">
+                          Data Kosong
+                      </td>
+                  </tr>
+                @endforelse
               </tbody>
             </table>
           </div>

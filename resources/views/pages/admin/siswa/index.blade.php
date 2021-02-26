@@ -25,7 +25,7 @@
                   </tr>
               </thead>
               <tbody>
-                @foreach($students as $student)
+                @forelse($students as $student)
                 <tr>
                 <td>{{ $student->nis }}</td>
                 <td>{{ $student->name }}</td>
@@ -45,7 +45,13 @@
                 
                 </td>
                 </tr>
-                @endforeach
+                @empty
+                  <tr>
+                      <td colspan="7" class="text-center">
+                          Data Kosong
+                      </td>
+                  </tr>
+                @endforelse
               </tbody>
             </table>
           </div>

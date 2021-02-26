@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Borrowing;
+use App\Student;
+use App\Book;
+
 
 class BorrowingController extends Controller
 {
@@ -23,7 +27,37 @@ class BorrowingController extends Controller
      */
     public function create()
     {
-        //
+        $number = Borrowing::count();
+
+        if($number > 0) {
+            $number = Borrowing::max('borrow_code');
+            $strnum = substr($number, 3, 3);
+            $strnum = $strnum + 1;
+            if(strlen($strnum) == 3) {
+                $kode = 'PNJ' . $strnum;
+            } else if (strlen($strnum) == 2) {
+                $kode = 'PNJ' . "0" . $strnum;
+            } else if (strlen($strnum) == 1) {
+                $kode = 'PNJ' . "00". $strnum;
+            }
+        } else {
+            $kode = 'PNJ' . "001";
+        }
+
+        return view('pages.admin.peminjaman.create', [
+            'kode' => $kode,
+            'students' => Student::orderBy('name', 'ASC')->get(),
+            'books' => Book::where('stock', '>=', '1')->orderBy('book_code', 'ASC')->get()
+        ]);
+    }
+
+    public function loadData(Request $request)
+    {
+    	if ($request->has('q')) {
+    		$cari = $request->q;
+    		$data = DB::table('books')->select('id', 'barcode')->where('barcode', 'LIKE', '%$cari%')->get();
+    		return response()->json($data);
+    	}
     }
 
     /**
