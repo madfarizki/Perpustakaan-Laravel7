@@ -32,13 +32,13 @@
                 <td>{{ $student->FilterGender }}</td>
                 <td>{{ $student->class }}</td>
                 <td>
-                  <a href="{{ route('siswa.edit', $student->id) }} " class="btn btn-sm btn-warning">
+                  <a href="{{ route('siswa.edit', $student->id) }} " class="btn btn-sm btn-warning" data-toggle="tooltip" data-placement="right" title="Edit">
                     <i class="fa fa-pencil-alt" ></i>
                   </a>
                   <form action="{{ route('siswa.destroy', $student->id)}} " method="POST">
                   @csrf
                   @method('delete')
-                  <button class="mt-2 btn btn-sm btn-danger">
+                  <button class="mt-2 btn btn-sm btn-danger" data-toggle="tooltip" data-placement="right" title="Hapus">
                     <i class="fas fa-trash"></i>
                   </button>
                   </form>
