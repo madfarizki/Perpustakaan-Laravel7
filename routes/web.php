@@ -31,6 +31,13 @@ Route::prefix('admin')
     
     Route::get('/search', 'BookController@search');
 
+    Route::get('/peminjaman/search', 'BorrowingController@loadData');
+    Route::get('/search/peminjaman', 'BorrowingController@search');
+    Route::get('/peminjaman/create/search', 'BorrowingController@action')->name('live_search.action');
+
+
+    Route::get('/find-barcode', 'BorrowingController@barcode')->name('find.barcode');
+
 });
 
 

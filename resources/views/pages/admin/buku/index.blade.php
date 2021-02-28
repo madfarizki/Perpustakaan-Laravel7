@@ -48,16 +48,16 @@
                 <td>{{ $bk->isbn }}</td>
                 <td>{{ $bk->stock }}</td>
                 <td>
-                  <a href="{{ route('buku.show', $bk->id) }} " class="btn btn-sm btn-info">
+                  <a href="{{ route('buku.show', $bk->id) }} " class="btn btn-sm btn-info" data-toggle="tooltip" data-placement="top" title="Lihat Detail">
                     <i class="fas fa-eye" ></i>
                   </a>
-                  <a href="{{ route('buku.edit', $bk->id) }} " class="btn btn-sm btn-warning">
+                  <a href="{{ route('buku.edit', $bk->id) }} " class="btn btn-sm btn-warning" data-toggle="tooltip" data-placement="top" title="Edit">
                     <i class="fa fa-pencil-alt" ></i>
                   </a>
-                  <form action="{{ route('buku.destroy', $bk->id)}} " method="POST">
+                  <form action="{{ route('buku.destroy', $bk->id)}} " method="POST" >
                   @csrf
                   @method('delete')
-                  <button class="mt-2 btn btn-sm btn-danger">
+                  <button class="mt-2 btn btn-sm btn-danger" data-toggle="tooltip" data-placement="right" title="Hapus">
                     <i class="fas fa-trash"></i>
                   </button>
                   </form>
