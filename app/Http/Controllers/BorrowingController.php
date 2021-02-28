@@ -47,6 +47,30 @@ class BorrowingController extends Controller
         }
         
     }
+    public function search(Request $request)
+    {
+        $search = $request->get('search');
+
+        $borrowings = Borrowing::with('book')->whereHas('book', function($q) use ($search)
+        {
+            $q->where('name', 'like', '%'.$search.'%');
+
+        })->get();
+
+        $borrowings = Borrowing::with('student')->whereHas('student', function($q) use ($search)
+        {
+            $q->where('name', 'like', '%'.$search.'%');
+
+        })
+        ->orWhere('borrow_code', 'LIKE', '%'. $search. '%')
+        ->get();
+
+        // $books = Book::whereLike(['name', 'author'], '%'. $search. '%')->get();
+
+        return view('pages.admin.peminjaman.index', [
+            'borrowings' => $borrowings
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      *
