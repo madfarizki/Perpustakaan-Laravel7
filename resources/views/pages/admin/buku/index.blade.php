@@ -31,6 +31,7 @@
             <table id="book-table" class="table table-bordered" width="100%" collspacing="0">
               <thead>
                   <tr>
+                     <th>No</th>
                       <th>Kode Buku</th>
                       <th>Judul Buku</th>
                       <th>Cover</th>
@@ -40,8 +41,10 @@
                   </tr>
               </thead>
               <tbody>
+                <?php $no = 0;?>
                 @forelse($books as $bk)
                 <tr>
+                <td>{{ ++$no }} </td>
                 <td>{{ $bk->book_code }}</td>
                 <td>{{ $bk->name }}</td>
                 <td><img src="{{ Storage::url($bk->image) }} " alt="" style="width: 100px" class="img-thumbnail"/></td>

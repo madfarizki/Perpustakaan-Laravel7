@@ -8,6 +8,7 @@ use App\Student;
 use App\Book;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
+use Carbon\Carbon;
 
 
 class BorrowingController extends Controller
@@ -172,7 +173,11 @@ class BorrowingController extends Controller
      */
     public function edit($id)
     {
-        //
+        $borrowing = Borrowing::findOrFail($id);
+
+        return view('pages.admin.peminjaman.edit', [
+            'borrowing' => $borrowing
+        ]);
     }
 
     /**
@@ -184,7 +189,15 @@ class BorrowingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate(request(), [
+            'return_date' => 'required|date'
+        ]);
+        Borrowing::findOrFail($id)->update([
+            'return_date' => request('return_date')
+        ]);
+
+        Alert::success('Berhasil', 'Peminjaman Berhasil diupdate');
+        return redirect()->route('peminjaman.index');
     }
 
     /**
@@ -204,5 +217,12 @@ class BorrowingController extends Controller
         
         Alert::success('Berhasil', ' Buku Berhasil dikembalikan');
         return back();
+    }
+
+    public function denda()
+    {
+        return view('pages.admin.denda.index', [
+            'borrowings' => Borrowing::where('return_date', '<', Carbon::now())->orderBy('borrow_code', 'ASC')->paginate(5)
+        ]);
     }
 }
