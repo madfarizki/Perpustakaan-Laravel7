@@ -17,6 +17,7 @@
             <table id="book-table" class="table table-bordered" width="100%" collspacing="0">
               <thead>
                   <tr>
+                      <th>No</th>
                       <th>NIS</th>
                       <th>Nama</th>
                       <th>Jenis Kelamin</th>
@@ -25,8 +26,10 @@
                   </tr>
               </thead>
               <tbody>
+                <?php $no = 0;?>
                 @forelse($students as $student)
                 <tr>
+                <td>{{ ++$no }} </td>
                 <td>{{ $student->nis }}</td>
                 <td>{{ $student->name }}</td>
                 <td>{{ $student->FilterGender }}</td>

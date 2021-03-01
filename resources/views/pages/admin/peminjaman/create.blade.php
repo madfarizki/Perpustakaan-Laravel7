@@ -21,16 +21,26 @@
                         <div class="form-group">
                             <form action="">
                                 <label>Scan Barcode Buku</label>
-                                <input
-                                    type="text"
-                                    name="barcode"
-                                    autofocus
-                                    id="barcode"
-                                    class="form-control"
-                                    onfocus="this.value"
-                                    =""
-                                    required
-                                />
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                      <div class="input-group-text">
+                                        <i class="fa fa-qrcode fa-2x"></i>
+                                      </div>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        name="barcode"
+                                        autofocus
+                                        id="barcode"
+                                        class="form-control "
+                                        onfocus="this.value"
+                                        =""
+                                        required
+                                    />
+                                  </div>
+
+                                    
+                                    
                                 <button
                                     type="submit"
                                     class="btn btn-primary d-none"
