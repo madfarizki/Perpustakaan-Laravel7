@@ -14,7 +14,6 @@
         <div class="card">
           <form action="{{ route('buku.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-
           <div class="card-body">
             <div class="form-group">
               <label>Kode Buku</label>

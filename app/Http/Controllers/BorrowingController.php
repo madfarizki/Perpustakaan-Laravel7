@@ -3,6 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Borrowing;
+use App\Student;
+use App\Book;
+use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert;
+use Carbon\Carbon;
+
 
 class BorrowingController extends Controller
 {
@@ -13,9 +20,58 @@ class BorrowingController extends Controller
      */
     public function index()
     {
-        return view('pages.admin.peminjaman.index');
+        $books = Book::all();
+        $borrowing = Borrowing::all();
+
+        return view('pages.admin.peminjaman.index',[
+            'borrowings' => Borrowing::orderBy('borrow_code', 'ASC')->paginate(5)
+        ]);
     }
 
+    public function barcode(Request $request)
+    {
+        $barcode = $request->get('barcode');
+        if($request->ajax()) {
+            $data = '';
+            $qry = DB::select("SELECT * FROM books where barcode='$barcode'");
+            foreach ($qry as $pgw) {
+                $data = array(
+                    'book_code'  =>  $pgw->book_code,
+                    'name'  =>  $pgw->name,
+                    // 'cover'  =>  $pgw->image,
+                    'author' =>  $pgw->author,
+                    'isbn' =>  $pgw->isbn,
+                    'id' =>  $pgw->id,
+                    );
+            }
+            echo json_encode($data);
+        }
+        
+    }
+    public function search(Request $request)
+    {
+        $search = $request->get('search');
+
+        $borrowings = Borrowing::with('book')->whereHas('book', function($q) use ($search)
+        {
+            $q->where('name', 'like', '%'.$search.'%');
+
+        })->get();
+
+        $borrowings = Borrowing::with('student')->whereHas('student', function($q) use ($search)
+        {
+            $q->where('name', 'like', '%'.$search.'%');
+
+        })
+        ->orWhere('borrow_code', 'LIKE', '%'. $search. '%')
+        ->get();
+
+        // $books = Book::whereLike(['name', 'author'], '%'. $search. '%')->get();
+
+        return view('pages.admin.peminjaman.index', [
+            'borrowings' => $borrowings
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -23,7 +79,46 @@ class BorrowingController extends Controller
      */
     public function create()
     {
-        //
+        $number = Borrowing::count();
+
+        if($number > 0) {
+            $number = Borrowing::max('borrow_code');
+            $strnum = substr($number, 3, 3);
+            $strnum = $strnum + 1;
+            if(strlen($strnum) == 3) {
+                $kode = 'PNJ' . $strnum;
+            } else if (strlen($strnum) == 2) {
+                $kode = 'PNJ' . "0" . $strnum;
+            } else if (strlen($strnum) == 1) {
+                $kode = 'PNJ' . "00". $strnum;
+            }
+        } else {
+            $kode = 'PNJ' . "001";
+        }
+
+
+        return view('pages.admin.peminjaman.create', [
+            'kode' => $kode,
+            'students' => Student::orderBy('name', 'ASC')->get(),
+            'books' => Book::where('stock', '>=', '1')->orderBy('book_code', 'ASC')->get(),
+        ]);
+    }
+
+    public function loadData(Request $request)
+    {
+    	// if ($request->has('q')) {
+    	// 	$cari = $request->q;
+    	// 	$data = DB::table('books')->select('id', 'barcode')->where('barcode', 'LIKE', '%$cari%')->get();
+    	// 	return response()->json($data);
+    	// }
+
+        $search = $request->get('search');
+
+        $books = Book::where('name', 'LIKE', '%'. $search. '%')->orWhere('author', 'LIKE', '%'. $search. '%')->get();
+
+        return view('pages.admin.peminjaman.create', [
+            'books' => $books
+        ]);
     }
 
     /**
@@ -34,7 +129,29 @@ class BorrowingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+
+        // $data = Book::where('id', $request->book_id)
+        // ->update([
+        //     'stock' => ($request->stock - 1),
+        // ]);
+        $book = DB::table('books')->where('id', $request->book_id)->get();
+        
+        $sum = Book::findOrFail($request->book_id);
+        Book::where('id', $request->book_id)->update([
+            'stock' => $sum->stock - 1
+        ]);
+
+       
+
+        $data = $request->all();
+        $data['book_id'] = $request->book_id;
+        
+      
+        // Borrowing::create($request->all());
+        Borrowing::create($data);
+        Alert::success('Berhasil', ' Buku berhasil dipinjam');
+        return redirect()->route('peminjaman.index');
     }
 
     /**
@@ -56,7 +173,11 @@ class BorrowingController extends Controller
      */
     public function edit($id)
     {
-        //
+        $borrowing = Borrowing::findOrFail($id);
+
+        return view('pages.admin.peminjaman.edit', [
+            'borrowing' => $borrowing
+        ]);
     }
 
     /**
@@ -68,7 +189,15 @@ class BorrowingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate(request(), [
+            'return_date' => 'required|date'
+        ]);
+        Borrowing::findOrFail($id)->update([
+            'return_date' => request('return_date')
+        ]);
+
+        Alert::success('Berhasil', 'Peminjaman Berhasil diupdate');
+        return redirect()->route('peminjaman.index');
     }
 
     /**
@@ -79,6 +208,21 @@ class BorrowingController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data = Borrowing::findOrFail($id);
+        $sum = Book::findOrFail($data->book_id);
+        Book::where('id', $data->book_id)->update([
+            'stock' => $sum->stock + 1
+        ]);
+        $data->delete();
+        
+        Alert::success('Berhasil', ' Buku Berhasil dikembalikan');
+        return back();
+    }
+
+    public function denda()
+    {
+        return view('pages.admin.denda.index', [
+            'borrowings' => Borrowing::where('return_date', '<', Carbon::now())->orderBy('borrow_code', 'ASC')->paginate(5)
+        ]);
     }
 }
