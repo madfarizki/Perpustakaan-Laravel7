@@ -49,12 +49,9 @@
                 @endphp
                   <td> {{ "Rp " . number_format($fine, 0,',','.') }}</td>
                   <td><p class="my-auto list-group-item-danger text-center rounded">{{ $day . " Hari" }}</p></td>
-
-                  
                   <td>{{ $borrow->borrow_code }}</td>
                   <td>{{ $borrow->student->name }}</td>
                   <td>{{ $borrow->book->name }}</td>
-                  
                 @empty
                 <tr>
                   <td colspan="7" class="text-center">
