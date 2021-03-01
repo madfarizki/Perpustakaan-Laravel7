@@ -36,7 +36,7 @@
                       <th>Cover</th>
                       <th>ISBN</th>
                       <th>Stok</th>
-                      <th>Action</th>
+                      <th>Aksi</th>
                   </tr>
               </thead>
               <tbody>

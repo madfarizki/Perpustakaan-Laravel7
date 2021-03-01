@@ -28,6 +28,7 @@ Route::prefix('admin')
     Route::resource('buku', 'BookController' );
     Route::resource('peminjaman', 'BorrowingController' );
     Route::resource('siswa', 'StudentController' );
+    Route::resource('laporan', 'StudentController' );
     
     Route::get('/search', 'BookController@search');
 

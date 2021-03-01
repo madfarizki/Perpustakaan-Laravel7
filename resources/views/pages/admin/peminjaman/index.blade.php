@@ -37,7 +37,7 @@
                       <th>Judul Buku</th>
                       <th>Tanggal Pinjam</th>
                       <th>Tanggal Kembali</th>
-                      <th>Action</th>
+                      <th>Aksi</th>
                   </tr>
               </thead>
               <tbody>

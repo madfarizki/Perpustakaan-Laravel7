@@ -7,6 +7,6 @@
     
   </form>
   <ul class="navbar-nav navbar-right">
-      <div class="d-sm-none d-lg-inline-block text-white">Hi, {{ Auth::user()->name}} </div></a>
+      <div class="d-sm-none d-lg-inline-block text-white">Hai, {{ Auth::user()->name}} </div></a>
   </ul>
 </nav>

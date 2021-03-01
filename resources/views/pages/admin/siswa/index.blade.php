@@ -21,7 +21,7 @@
                       <th>Nama</th>
                       <th>Jenis Kelamin</th>
                       <th>Kelas</th>
-                      <th>Action</th>
+                      <th>Aksi</th>
                   </tr>
               </thead>
               <tbody>

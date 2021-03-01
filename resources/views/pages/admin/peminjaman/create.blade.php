@@ -239,29 +239,29 @@
                         method: "GET",
                         data: "barcode=" + barcode,
                     }).done(function (data) {
-                        var json = data,
+                            var json = data,
                             obj = JSON.parse(json);
 
-                        //  $('#cover').attr('src', "{{ Storage::url('public/') }}" + obj.cover);
+                            //  $('#cover').attr('src', "{{ Storage::url('public/') }}" + obj.cover);
 
-                        $(".form-group").append(
-                            '<input type="hidden" name="book_id" value="' +
-                                obj.id +
-                                '" />'
-                        );
-                        $("tbody").append(
-                            "<tr>" +
-                                "<td>" +
-                                obj.book_code +
-                                "</td>" +
-                                "<td>" +
-                                obj.name +
-                                "</td>" +
-                                "<td>" +
-                                obj.author +
-                                "</td>" +
-                                "</tr>"
-                        );
+                            $(".form-group").append(
+                                '<input type="hidden" name="book_id" value="' +
+                                    obj.id +
+                                    '" />'
+                            );
+                            $("tbody").append(
+                                "<tr>" +
+                                    "<td>" +
+                                    obj.book_code +
+                                    "</td>" +
+                                    "<td>" +
+                                    obj.name +
+                                    "</td>" +
+                                    "<td>" +
+                                    obj.author +
+                                    "</td>" +
+                                    "</tr>"
+                            );  
                     });
                 });
             });
