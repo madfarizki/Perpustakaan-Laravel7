@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// login security
+// Login Security
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -22,22 +22,35 @@ Route::get('/', function () {
 Route::prefix('admin')
     ->middleware(['auth', 'role'])
     ->group(function() {
-
+    // Dashboard
     Route::get('/', 'AdminController@index' )->name('dashboard');
 
+    // Buku
     Route::resource('buku', 'BookController' );
-    Route::resource('peminjaman', 'BorrowingController' );
-    Route::resource('siswa', 'StudentController' );
-    Route::resource('laporan', 'StudentController' );
-    
     Route::get('/search', 'BookController@search');
 
+    // Peminjaman
+    Route::resource('peminjaman', 'BorrowingController' );
     Route::get('/peminjaman/search', 'BorrowingController@loadData');
     Route::get('/search/peminjaman', 'BorrowingController@search');
-    Route::get('/peminjaman/create/search', 'BorrowingController@action')->name('live_search.action');
+    Route::get('/find-barcode', 'BorrowingController@barcode')->name('find.barcode');
+    // Route::get('/peminjaman/create/search', 'BorrowingController@action')->name('live_search.action');
+
+    // Siswa
+    Route::resource('siswa', 'StudentController' );
+    Route::get('/search/siswa', 'StudentController@search');
+
+    // Laporan
+    Route::get('/laporan', 'ReportController@borrowingReport' )->name('admin.laporan');
+    Route::get('/laporan/search', 'ReportController@borrowingReportSearch' )->name('admin.laporan.search');
+    Route::get('/laporan/generate', 'ReportController@generateReportPdf' )->name('laporan.generate.pdf');
+    
+    // Denda
     Route::get('/denda', 'BorrowingController@denda')->name('denda');
 
-    Route::get('/find-barcode', 'BorrowingController@barcode')->name('find.barcode');
+    // Petugas
+    Route::resource('petugas', 'OfficerController');
+    Route::get('/search/petugas', 'OfficerController@search');
 
 });
 

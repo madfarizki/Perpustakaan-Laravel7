@@ -44,7 +44,7 @@
                 <?php $no = 0;?>
                 @forelse($books as $bk)
                 <tr>
-                <td>{{ ++$no }} </td>
+                <td>{{ ++$no . "." }} </td>
                 <td>{{ $bk->book_code }}</td>
                 <td>{{ $bk->name }}</td>
                 <td><img src="{{ Storage::url($bk->image) }} " alt="" style="width: 100px" class="img-thumbnail"/></td>

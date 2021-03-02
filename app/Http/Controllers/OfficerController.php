@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Student;
+use Illuminate\Support\Facades\Hash;
+
+use App\User;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class StudentController extends Controller
+
+
+class OfficerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +19,10 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::all();
+        $users = User::all();
 
-        return view('pages.admin.siswa.index', [
-            'students' => $students
+        return view('pages.admin.petugas.index', [
+            'users' => $users
         ]);
     }
 
@@ -26,12 +30,12 @@ class StudentController extends Controller
     {
         $search = $request->get('search');
 
-        $students = Student::where('name', 'LIKE', '%'. $search. '%')->orWhere('class', 'LIKE', '%'. $search. '%')->get();
+        $users = User::where('name', 'LIKE', '%'. $search. '%')->orWhere('role', 'LIKE', '%'. $search. '%')->get();
 
         // $books = Book::whereLike(['name', 'author'], '%'. $search. '%')->get();
 
-        return view('pages.admin.siswa.index', [
-            'students' => $students
+        return view('pages.admin.petugas.index', [
+            'users' => $users
         ]);
     }
 
@@ -42,7 +46,7 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return view('pages.admin.siswa.create');
+        return view('pages.admin.petugas.create');
     }
 
     /**
@@ -53,12 +57,26 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
+        $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|confirmed|min:8',
+        
+        ]);
 
-        Student::create($data);
+        $user = $request->all();
 
-        Alert::success('Berhasil', ' Siswa Baru Berhasil ditambahkan');
-        return redirect()->route('siswa.index');
+        $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'role' => $request->role,
+        'password' => Hash::make($request->password),
+        
+        ]);
+
+
+        Alert::success('Berhasil', ' Petugas Baru Berhasil ditambahkan');
+        return redirect()->route('petugas.index');
     }
 
     /**
@@ -80,11 +98,10 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-
-        $student = Student::findOrFail($id);
+        $user = User::findOrFail($id);
         
-        return view('pages.admin.siswa.edit', [
-            'student' => $student
+        return view('pages.admin.petugas.edit', [
+            'user' => $user
         ]);
     }
 
@@ -99,11 +116,11 @@ class StudentController extends Controller
     {
         $data = $request->all();
 
-        $student = Student::findOrFail($id);
+        $user = User::findOrFail($id);
 
-        $student->update($data);
-        Alert::success('Berhasil', ' Siswa Berhasil diperbarui');
-        return redirect()->route('siswa.index');
+        $user->update($data);
+        Alert::success('Berhasil', ' Petugas Berhasil diperbarui');
+        return redirect()->route('petugas.index');
     }
 
     /**
@@ -114,10 +131,10 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        $data = Student::findOrFail($id);
+        $data = User::findOrFail($id);
         
         $data->delete();
-        Alert::success('Berhasil', ' Siswa Berhasil dihapus');
+        Alert::success('Berhasil', ' Petugas Berhasil dihapus');
         return back();
     }
 }

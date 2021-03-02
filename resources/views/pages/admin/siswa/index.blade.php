@@ -8,7 +8,24 @@
     <div class="section-header">
       <h1>Data Siswa</h1>
     </div>
-    <a href="{{ route('siswa.create')}}" class="btn btn-icon icon-left btn-primary mb-4"><i class="fas fa-plus"></i>Tambah Siswa</a>
+    
+
+    <div class="row">
+      <div class="col">
+
+        <a href="{{ route('siswa.create')}}" class="btn btn-icon icon-left btn-primary mb-4"><i class="fas fa-plus"></i>Tambah Siswa</a>
+      </div>
+      <div class="col">
+        <form action="/admin/search/siswa" method="GET" class="form-inline mr-auto">
+          <div class="search-element">
+            <input class="form-control" type="search" placeholder="Cari Siswa" aria-label="Search" name="search" data-width="250">
+            <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
+            <div class="search-backdrop"></div>
+          </div>
+        </form>
+
+      </div>
+    </div>
     
     <div class="row">
       <div class="col-12 col-md-12 col-lg-12">
@@ -29,7 +46,7 @@
                 <?php $no = 0;?>
                 @forelse($students as $student)
                 <tr>
-                <td>{{ ++$no }} </td>
+                <td>{{ ++$no . "." }} </td>
                 <td>{{ $student->nis }}</td>
                 <td>{{ $student->name }}</td>
                 <td>{{ $student->FilterGender }}</td>

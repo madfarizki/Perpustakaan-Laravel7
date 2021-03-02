@@ -26,7 +26,7 @@
       </div>
       <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="card card-statistic-1">
-          <div class="card-icon bg-danger">
+          <div class="card-icon bg-success">
             <i class="fas fa-book-reader"></i>
           </div>
           <div class="card-wrap">
@@ -56,15 +56,15 @@
       </div>
       <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="card card-statistic-1">
-          <div class="card-icon bg-success">
-            <i class="fas fa-user-cog"></i>
+          <div class="card-icon bg-danger">
+            <i class="fas fa-money-bill-alt"></i>
           </div>
           <div class="card-wrap">
             <div class="card-header">
-              <h4>Jumlah Petugas</h4>
+              <h4>Jumlah Denda</h4>
             </div>
             <div class="card-body">
-              {{ $petugas }}
+              {{ $denda }}
             </div>
           </div>
         </div>
@@ -116,7 +116,7 @@
                     @foreach($new_book as $new)
                       
                     <tr>
-                      <td>{{ ++$no}} </td>
+                      <td>{{ ++$no . "."}} </td>
                       <td>
                         {{ $new->name}}
                       </td>
@@ -147,7 +147,7 @@
                 <div class="col-6 col-sm-3 col-lg-4">
                   <div class="avatar-item mb-0">
                     <img alt="image" src="{{ asset('../assets/img/avatar/avatar-1.png')}} " class="img-fluid">
-                    <div class="avatar-badge" title="Admin" data-toggle="tooltip"><i class="fas fa-cog"></i></div>
+                    <div class="avatar-badge text-capitalize" title="{{ $us->role }}" data-toggle="tooltip"><i class="fas fa-cog"></i></div>
                   </div>
                 </div>
                 <div class="media-body m-auto">

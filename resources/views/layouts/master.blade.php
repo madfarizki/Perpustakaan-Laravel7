@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title>@yield('title') | Perpustakaan Nesas</title>
+  <link rel="icon" href="{{ URL::asset('favicon.png') }}" type="image/x-icon"/>
+
 
   @stack('prepend-style')
   @include('includes.style')

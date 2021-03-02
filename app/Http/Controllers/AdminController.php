@@ -7,7 +7,7 @@ use App\User;
 use App\Book;
 use App\Student;
 use App\Borrowing;
-
+use Carbon\Carbon;
 
 
 class AdminController extends Controller
@@ -25,7 +25,7 @@ class AdminController extends Controller
             'student' => Student::count(),
             'students' => Student::get(),
             'borrowing' => Borrowing::count(),
-            'petugas' => User::where('role', '=', 'petugas')->count(),
+            'denda' => Borrowing::where('return_date', '<', Carbon::now())->orderBy('borrow_code', 'ASC')->count(),
             'users'=> User::get(),
             'trendings' => $trendings,
             'new_book' => Book::orderBy('created_at', 'desc')->limit(5)->get(),

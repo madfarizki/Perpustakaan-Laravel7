@@ -45,7 +45,7 @@
                 <?php $no = 0;?>
                 @forelse($borrowings as $borrow)
                 <tr>
-                  <td>{{ ++$no }} </td>
+                  <td>{{ ++$no . "." }} </td>
                   <td>{{ $borrow->borrow_code }}</td>
                   <td>{{ $borrow->student->name }}</td>
                   <td>{{ $borrow->book->name }}</td>
