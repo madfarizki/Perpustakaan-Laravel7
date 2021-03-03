@@ -41,10 +41,14 @@ Route::prefix('admin')
     Route::get('/search/siswa', 'StudentController@search');
 
     // Laporan
-    Route::get('/laporan', 'ReportController@borrowingReport' )->name('admin.laporan');
+    // Route::get('/laporan', 'ReportController@borrowingReport' )->name('admin.laporan');
     Route::get('/laporan/search', 'ReportController@borrowingReportSearch' )->name('admin.laporan.search');
     Route::get('/laporan/generate', 'ReportController@generateReportPdf' )->name('laporan.generate.pdf');
     
+    Route::get('/laporan', 'ReportController@orderReport')->name('report.order');
+    Route::get('/laporan/pdf/{daterange}', 'ReportController@orderReportPdf')->name('report.order_pdf');
+
+
     // Denda
     Route::get('/denda', 'BorrowingController@denda')->name('denda');
 

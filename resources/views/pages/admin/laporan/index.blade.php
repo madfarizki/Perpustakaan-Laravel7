@@ -25,23 +25,23 @@
       <div class="col-12 col-md-12 col-lg-12">
         <div class="card">
           <div class="card-body">
-            <form action="{{ route('admin.laporan.search') }}" method="get" enctype="multipart/form-data">
+            
               <label>Cari berdasarkan Tanggal Pinjam :</label>
-              <div class="input-group">
-                <input type="date" name="borrow_date" autofocus id="barcode" class="form-control " onfocus="this.value"=""
-                  required />
-                  <button type="submit" class="btn btn-primary ml-3" id="btn">
-                    Cari
-                  </button>
-              </div>
-            </form>
+              <div class="row input-daterange">
+                <div class="col-md-4">
+                    <input type="text" name="date" id="date" class="form-control" placeholder="From Date" readonly />
+                </div>
+                <div class="col-md-4">
+                    <button type="button" name="filter" id="filter" class="btn btn-primary">Filter</button>
+                </div>
+            </div>
           </div>
         </div>
       </div>
       <div class="col-12 col-md-12 col-lg-12">
         <div class="card">
           <div class="card-body table-responsive-sm">
-            <table id="book-table" class="table table-bordered" width="100%" collspacing="0">
+            <table id="order_table" class="table table-bordered" width="100%" collspacing="0">
               <thead>
                 <tr>
                   <th>No</th>
@@ -52,33 +52,8 @@
                   <th>Tanggal Kembali</th>
                 </tr>
               </thead>
-              @if(request('borrow_date'))
-              @forelse($borrowings as $borrow)
-              <tbody>
-                <tr>
-                  <td>{{ $autoNum++ . "." }} </td>
-                  <td>{{ $borrow->borrow_code }}</td>
-                  <td>{{ $borrow->student->name }}</td>
-                  <td>{{ $borrow->book->name }}</td>
-                  <td>{{ \Carbon\Carbon::parse($borrow->borrow_date)->format('d-m-Y') }}</td>
-                  <td>{{ \Carbon\Carbon::parse($borrow->return_date)->format('d-m-Y') }}</td>
-                </tr>
-                @empty
-                <tr>
-                  <td colspan="7" class="text-center">
-                    Laporan Peminjaman Pada <b>{{ request('borrow_date') }} Tidak Ada! </b>
-                  </td>
-                </tr>
 
-              </tbody>
-              @endforelse
-              @else
-              <tr>
-                <td colspan="7" class="text-center">
-                  Silahkan cari laporan berdasarkan tanggal Peminjaman
-                </td>
-              </tr>
-              @endif
+            
             </table>
           </div>
         </div>
@@ -87,3 +62,53 @@
   </section>
 </div>
 @endsection
+@push('addon-script')
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script>
+      $(function() {
+        
+      $('input[name="date"]').daterangepicker({
+        opens: 'bottom',
+      }, function(start, end, label) {
+        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        $('#order_table').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+          url:'{{ route("report.order") }}',
+          data:{start:start, end:end},
+        },
+        columns: [
+          
+          {data: 'borrow_code', name: 'borrow_code' },
+          {data: 'student.name', name: 'name' },
+          {data: 'book.name', name: 'name' },
+          {data: 'borrow_date', name: 'borrow_date' },
+          {data: 'return_date', name: 'return_date' },
+          
+        ]
+        });
+      });
+
+    });
+    $('#date').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+      start_date=picker.startDate.format('DD/MM/YYYY');
+      end_date=picker.endDate.format('DD/MM/YYYY');
+      $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
+      $dTable.draw();
+    });
+
+    $('#date').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+      start_date='';
+      end_date='';
+      $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
+      $dTable.draw();
+    });
+
+</script>
+@endpush
