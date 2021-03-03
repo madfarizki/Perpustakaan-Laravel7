@@ -52,7 +52,9 @@
                   <th>Tanggal Kembali</th>
                 </tr>
               </thead>
-
+              <tbody>
+                
+              </tbody>
             
             </table>
           </div>
@@ -74,32 +76,45 @@
         opens: 'bottom',
       }, function(start, end, label) {
         console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-        $('#order_table').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-          url:'{{ route("report.order") }}',
-          data:{start:start, end:end},
-        },
-        columns: [
-          
-          {data: 'borrow_code', name: 'borrow_code' },
-          {data: 'student.name', name: 'name' },
-          {data: 'book.name', name: 'name' },
-          {data: 'borrow_date', name: 'borrow_date' },
-          {data: 'return_date', name: 'return_date' },
-          
-        ]
-        });
       });
 
     });
     $('#date').on('apply.daterangepicker', function(ev, picker) {
-      $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
-      start_date=picker.startDate.format('DD/MM/YYYY');
-      end_date=picker.endDate.format('DD/MM/YYYY');
-      $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
-      $dTable.draw();
+      var startDate = picker.startDate.format('YYYY-MM-DD');
+      var endDate = picker.endDate.format('YYYY-MM-DD');
+      console.log(startDate)
+      console.log(endDate)
+      
+      $.ajax({
+        url: "{{ route('report.order') }}",
+        method: 'GET',
+        data: {startDate, endDate},
+        success: function(data) {
+          var json = data,
+          obj = JSON.parse(json);
+          console.log(data);
+
+          $("tbody").append(
+            "<tr>" +
+                "<td>" +
+                obj.borrow_code +
+                 "</td>" +
+                 "<td>" +
+                obj.student_name +
+                 "</td>" +
+                 "<td>" +
+                obj.book_name +
+                 "</td>" +
+                 "<td>" +
+                obj.borrow_date +
+                 "</td>" +
+                 "<td>" +
+                obj.return_date +
+                 "</td>" +
+              "</tr>"
+          );  
+        }
+      });
     });
 
     $('#date').on('cancel.daterangepicker', function(ev, picker) {

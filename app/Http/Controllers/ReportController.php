@@ -53,34 +53,29 @@ class ReportController extends Controller
     }
 
     public function orderReport(Request $request) {
-        if(request()->ajax())
-        {
-        if(!empty($request->from_date))
-        {
-        // $data = DB::table('borrowings')
-        //     ->with(['student', 'book'])
-        //     ->whereBetween('borrow_date', array($request->from_date, $request->to_date))
-        //     ->get();
-        // }
 
-        $data = Borrowing::with('student', 'book');
-                return DataTables::eloquent($data)
-                ->addColumn('student', function ($data) {
-                    return $data->student->name;
-                })
-                ->whereBetween('borrow_date', array($request->from_date, $request->to_date))
-                ->get();
-        }
+        // $start = date('2021-02-27');
+        // $end = date('2021-03-02');
 
-        else
-        {
-        $data = Borrowing::with('student', 'book')->get();
-        }
-        return datatables()->of($data)->make(true);
-        }
-        return view('pages.admin.laporan.index',[
-            'autoNum' => $this->autoNumber,
-        ]);
+        $start = $request->get('startDate');
+        $end = $request->get('endDate');
+        
+        
+        if($request->ajax()) {
+            $data = '';
+            $qry = Borrowing::whereBetween('borrow_date',[$start,$end])->with('book', 'student')->get();
+            foreach ($qry as $pgw) {
+                $data = array(
+                    'borrow_code'  =>  $pgw->borrow_code,
+                    'book_name'  =>  $pgw->book->name,
+                    'student_name'  =>  $pgw->student->name,
+                    'borrow_date'  =>  $pgw->borrow_date,
+                    'return_date'  =>  $pgw->return_date,
+                    );
+            }
+            echo json_encode($data);
+        }        
+        // $report = Borrowing::whereDate('borrow_date','>=',$start)->whereDate('borrow_date','<=',$end)->get();
     }
     
 
