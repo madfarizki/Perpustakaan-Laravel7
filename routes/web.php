@@ -46,9 +46,6 @@ Route::prefix('admin')
     Route::get('/laporan/generate', 'ReportController@generateReportPdf' )->name('laporan.generate.pdf');
     
     Route::get('/laporan', 'ReportController@borrowingReport')->name('laporan');
-    Route::get('/laporan/order', 'ReportController@orderReport')->name('report.order');
-    Route::get('/laporan/pdf/{daterange}', 'ReportController@orderReportPdf')->name('report.order_pdf');
-
 
     // Denda
     Route::get('/denda', 'BorrowingController@denda')->name('denda');
