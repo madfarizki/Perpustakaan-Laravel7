@@ -248,11 +248,13 @@
                         url: "{{ route('find.barcode') }}",
                         method: "GET",
                         data: "barcode=" + barcode,
-                    }).done(function (data) {
+                    }).then(function (data) {
                             var json = data,
                             obj = JSON.parse(json);
 
-                            //  $('#cover').attr('src', "{{ Storage::url('public/') }}" + obj.cover);
+                            if(!obj) {
+                               alert(`Buku dengan kode ${barcode} tidak ditemukan!`)
+                            } else {
 
                             $(".form-group").append(
                                 '<input type="hidden" name="book_id" value="' +
@@ -272,7 +274,9 @@
                                     "</td>" +
                                     "</tr>"
                             );  
-                    });
+                            }
+                    })
+                    
                 });
             });
         </script>
